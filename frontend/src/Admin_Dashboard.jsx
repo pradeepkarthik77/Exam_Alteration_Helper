@@ -18,7 +18,6 @@ import ExamScheduleTable from './View_Schedule/View_Schedule';
 import Admin_Edit_Profile from "./Admin_Edit_Profile/Admin_Edit_Profile"
 import ExamTable from './Modify_Table/Modify_Table';
 import Admin_View_Request from "./Admin_View_Request/Admin_View_Request"
-
 function AdminDashboard() 
 {
   const username = localStorage.getItem("UserName")

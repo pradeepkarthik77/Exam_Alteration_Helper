@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
 import { Grid } from '@mui/material';
 import axios from 'axios';  
+import config from './config.json';
  
   const Table = ({ data }) => (
     <div style={{ height: '300px', overflowY: 'auto', marginTop: '10px' }}>
@@ -49,7 +50,7 @@ export default function CardDemo() {
   {
     console.log("Recieved request for fetch alerts")
     try{
-      const response = await axios.post("http://localhost:5000/fetch_faculty_alerts",{});
+      const response = await axios.post(config.BASE_URL+"/fetch_faculty_alerts",{});
   
       if(response.status === 200)
       {

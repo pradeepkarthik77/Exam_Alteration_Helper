@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
 import { Grid } from '@mui/material';
 import axios from 'axios';
+import config from './config.json';
 
 const alertData = [
   { date: '2023-05-14', course: 'Alert description 1', hall: 'Hall A' },
@@ -61,7 +62,7 @@ export default function FacultySchedule() {
     {
       console.log("Recieved request for fetch alerts")
       try{
-        const response = await axios.post("http://localhost:5000/fetch_faculty_sched",{name: username});
+        const response = await axios.post(config.BASE_URL+"/fetch_faculty_sched",{name: username});
     
         if(response.status === 200)
         {

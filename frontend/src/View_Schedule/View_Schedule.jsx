@@ -4,7 +4,7 @@ import './View_Schedule.css';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSort } from "@fortawesome/free-solid-svg-icons";
-
+import config from '../config.json';
 // import Modal from 'react-bootstrap/Modal';
 // import Button from 'react-bootstrap/Button';
 // import Form from 'react-bootstrap/Form';
@@ -24,7 +24,7 @@ const ExamScheduleTable = () => {
     {
       console.log("Recieved request for fetch view schedule")
       try{
-        const response = await axios.post("http://localhost:5000/fetch_view_table",{});
+        const response = await axios.post(config.BASE_URL+"/fetch_view_table",{});
     
         if(response.status === 200)
         {

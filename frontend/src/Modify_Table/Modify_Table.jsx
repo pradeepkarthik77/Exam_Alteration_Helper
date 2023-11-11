@@ -9,6 +9,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import "./Modify_Table.css";
 import axios from "axios";
+import config from '../config.json';
 
 const ExamTable = () => {
   // set initial state with the given JSON data
@@ -59,7 +60,7 @@ const ExamTable = () => {
       await new Promise(resolve => setTimeout(resolve, 1000));
       // alert("hello")
       try{
-        const response = await axios.post("http://localhost:5000/fetch_view_table",{});
+        const response = await axios.post(config.BASE_URL+"/fetch_view_table",{});
     
         if(response.status === 200)
         {
@@ -196,7 +197,7 @@ const ExamTable = () => {
   const AddinBackend = async()=>{
     console.log("Recieved request for adding exam")
       try{
-        const response = await axios.post("http://localhost:5000/add_exam",{"formdata": formData});
+        const response = await axios.post(config.BASE_URL+"/add_exam",{"formdata": formData});
     
         if(response.status === 200)
         {
@@ -222,7 +223,7 @@ const ExamTable = () => {
   const EditinBackend = async()=>{
     console.log("Recieved request for fetch view schedule")
       try{
-        const response = await axios.post("http://localhost:5000/edit_exam",{"formdata": formData});
+        const response = await axios.post(config.BASE_URL+"/edit_exam",{"formdata": formData});
     
         if(response.status === 200)
         {
@@ -248,7 +249,7 @@ const ExamTable = () => {
   const DeleteinBackend = async()=>{
     console.log("Recieved request for delete a exam")
       try{
-        const response = await axios.post("http://localhost:5000/delete_exam",{"_id": deleterow});
+        const response = await axios.post(config.BASE_URL+"/delete_exam",{"_id": deleterow});
     
         if(response.status === 200)
         {
@@ -276,7 +277,7 @@ const ExamTable = () => {
   const getAvailableData = async()=>{
     console.log("Recieved request for fetch avaiable options")
       try{
-        const response = await axios.post("http://localhost:5000/fetch_available",{"date": formData.date,"TimeSlot": formData.TimeSlot,"_id": formData._id});
+        const response = await axios.post(config.BASE_URL+"/fetch_available",{"date": formData.date,"TimeSlot": formData.TimeSlot,"_id": formData._id});
     
         if(response.status === 200)
         {

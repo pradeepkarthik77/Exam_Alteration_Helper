@@ -22,7 +22,7 @@ import RequestAdmin from './Request_Admin/Request_Admin';
 import RequestFaculty from './Request_Faculty/Request_Faculty';
 import Faculty_Cards from './Faculty_Cards/Faculty_Cards';
 import ViewRequest from './View_Requests/View_Requests';
-
+import config from './config.json';
 
 function FacultyDashboard() 
 {

@@ -1,6 +1,7 @@
 import React, { useState,useEffect } from "react";
 import './Admin_Edit_Profile.css';
 import axios from 'axios';
+import config from '../config.json';
 
 
 const Admin_Edit_Profile = () => {
@@ -25,7 +26,7 @@ const Admin_Edit_Profile = () => {
     {
       console.log("Recieved request for facult edit profile")
       try{
-        const response = await axios.post("http://localhost:5000/fetch_edit_profile",{email: email_id});
+        const response = await axios.post(config.BASE_URL+"/fetch_edit_profile",{email: email_id});
     
         if(response.status === 200)
         {
@@ -129,7 +130,7 @@ const Admin_Edit_Profile = () => {
 
     console.log("Recieved request for facult edit profile")
       try{
-        const response = await axios.post("http://localhost:5000/update_admin_profile",tosend);
+        const response = await axios.post(config.BASE_URL+"/update_admin_profile",tosend);
     
         if(response.status === 200)
         {

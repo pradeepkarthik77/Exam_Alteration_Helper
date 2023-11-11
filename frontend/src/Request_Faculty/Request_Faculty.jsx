@@ -5,7 +5,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import "./Request_Faculty.css";
 import axios from "axios";
-
+import config from '../config.json';
 const RequestFaculty = () => {
   // set initial state with the given JSON data
   const [exams, setExams] = useState([]);
@@ -26,7 +26,7 @@ const RequestFaculty = () => {
       await new Promise(resolve => setTimeout(resolve, 1000));
       // alert("hello")
       try{
-        const response = await axios.post("http://localhost:5000/fetch_faculty_sched",{name: username});
+        const response = await axios.post(config.BASE_URL+"/fetch_faculty_sched",{name: username});
     
         if(response.status === 200)
         {
@@ -101,7 +101,7 @@ const RequestFaculty = () => {
   const EditinBackend = async()=>{
     console.log("Recieved request for fetch view schedule")
       try{
-        const response = await axios.post("http://localhost:5000/request_faculty",{"formdata": formData});
+        const response = await axios.post(config.BASE_URL+"/request_faculty",{"formdata": formData});
     
         if(response.status === 200)
         {
@@ -127,7 +127,7 @@ const RequestFaculty = () => {
   const getAvailableData = async()=>{
     console.log("Recieved request for fetch avaiable options")
       try{
-        const response = await axios.post("http://localhost:5000/fetch_available",{"date": formData.date,"TimeSlot": formData.TimeSlot,"_id": formData._id});
+        const response = await axios.post(config.BASE_URL+"/fetch_available",{"date": formData.date,"TimeSlot": formData.TimeSlot,"_id": formData._id});
     
         if(response.status === 200)
         {

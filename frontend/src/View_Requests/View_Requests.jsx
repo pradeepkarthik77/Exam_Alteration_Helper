@@ -11,7 +11,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-
+import config from '../config.json';
 
 export default function ViewRequest(props) {
 
@@ -66,7 +66,7 @@ export default function ViewRequest(props) {
   // async function fetchOldValues(rowid)
   // {
   //   try{
-  //     const response = await axios.post("http://localhost:5000/fetch_old_values",{_id: rowid});
+  //     const response = await axios.post(config.BASE_URL+"/fetch_old_values",{_id: rowid});
   
   //     if(response.status === 200)
   //     {
@@ -107,7 +107,7 @@ export default function ViewRequest(props) {
   {
     console.log("Recieved request for fetch requests")
     try{
-      const response = await axios.post("http://localhost:5000/fetch_faculty_requests",{name: username});
+      const response = await axios.post(config.BASE_URL+"/fetch_faculty_requests",{name: username});
   
       if(response.status === 200)
       {
@@ -140,7 +140,7 @@ export default function ViewRequest(props) {
   const EditinBackend = async()=>{
     console.log("Recieved request for fetch view schedule")
       try{
-        const response = await axios.post("http://localhost:5000/accept_faculty_request",{"formdata": editdata});
+        const response = await axios.post(config.BASE_URL+"/accept_faculty_request",{"formdata": editdata});
     
         if(response.status === 200)
         {
@@ -167,7 +167,7 @@ export default function ViewRequest(props) {
   const RejectRequest = async()=>{
     console.log("Recieved request for rejecting request")
       try{
-        const response = await axios.post("http://localhost:5000/reject_faculty_request",{"formdata": editdata});
+        const response = await axios.post(config.BASE_URL+"/reject_faculty_request",{"formdata": editdata});
     
         if(response.status === 200)
         {
@@ -194,7 +194,7 @@ export default function ViewRequest(props) {
   // const getAvailableData = async()=>{
   //   console.log("Recieved request for fetch avaiable options")
   //     try{
-  //       const response = await axios.post("http://localhost:5000/fetch_available",{"date": editdata.date,"TimeSlot": editdata.TimeSlot,"_id": editdata.rowid});
+  //       const response = await axios.post(config.BASE_URL+"/fetch_available",{"date": editdata.date,"TimeSlot": editdata.TimeSlot,"_id": editdata.rowid});
     
   //       if(response.status === 200)
   //       {

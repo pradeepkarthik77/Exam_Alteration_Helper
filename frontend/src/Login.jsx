@@ -3,6 +3,7 @@ import './Login.css'
 import image1 from './assets/log.svg';
 import image2 from './assets/register.svg';
 import axios from 'axios';
+import config from './config.json';
 
 class OTPForm extends React.Component
 {
@@ -19,7 +20,7 @@ class OTPForm extends React.Component
   {
     try{
 
-      const response = await axios.post("http://localhost:5000/otp_handle",{ email: this.props.sharedEmail,otp: otp });
+      const response = await axios.post(config.BASE_URL+"/otp_handle",{ email: this.props.sharedEmail,otp: otp });
   
       if(response.status === 200)
       {
@@ -105,7 +106,7 @@ class LoginForm extends React.Component
 
     try{
 
-    const response = await axios.post("http://localhost:5000/loginuser",{ email: email, password: password });
+    const response = await axios.post(config.BASE_URL+"/loginuser",{ email: email, password: password });
 
     if(response.status === 200)
     {
@@ -253,7 +254,7 @@ class ForgetPassword extends React.Component
 
     try{
 
-    const response = await axios.post("http://localhost:5000/forget_email",{ email: email });
+    const response = await axios.post(config.BASE_URL+"/forget_email",{ email: email });
 
     if(response.status === 200)
     {

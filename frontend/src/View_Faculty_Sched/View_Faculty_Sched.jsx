@@ -4,7 +4,7 @@ import './View_Faculty_Sched.css';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSort } from "@fortawesome/free-solid-svg-icons";
-
+import config from '../config.json';
 import axios from 'axios';
 
 const FacultyScheduleTable = () => {
@@ -18,7 +18,7 @@ const FacultyScheduleTable = () => {
     {
       console.log("Recieved request for Faculty view schedule")
       try{
-        const response = await axios.post("http://localhost:5000/fetch_faculty_sched",{name: username});
+        const response = await axios.post(config.BASE_URL+"/fetch_faculty_sched",{name: username});
     
         if(response.status === 200)
         {
