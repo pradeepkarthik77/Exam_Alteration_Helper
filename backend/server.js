@@ -1,6 +1,8 @@
 const express = require("express");
 const MongoClient = require('mongodb').MongoClient
 const { ObjectId } = require('mongodb');
+const fs = require('fs');
+const { BlobServiceClient } = require("@azure/storage-blob");
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const { Storage } = require('@google-cloud/storage');
@@ -17,6 +19,10 @@ const storage = new Storage({
   });
 
 const bucketName = config.bucketName;
+
+const connectionString = config.AZURE_CONNECTION_STRING;
+const containerName = "mahesh";
+const localFilePath = "level1.png";
 
 const cors = require('cors');
 const multerStorage = multer.memoryStorage(); // You can change this to store files on disk
@@ -174,6 +180,8 @@ app.post("/loginuser",async (req, res) => {
 
     const result = await logintab.findOne(query);
 
+    console.log(result)
+
     if(result !== null)
     {
         const objToSend = {
@@ -199,46 +207,94 @@ function generateRandomNumber() {
   }
 
   app.post('/update_image', upload.single('image'), async (req, res) => {
-
     try {
         if (!req.file) {
-          return res.status(400).json({ error: 'No file provided' });
+            return res.status(400).json({ error: 'No file provided' });
         }
 
-        const filter = {email: req.body.email };
-    
+        const filter = { email: req.body.email };
         const fileBuffer = req.file.buffer;
-    
-        // Generate a unique filename for the uploaded image
-        const filename = `${uuidv4()}-${req.file.originalname}`;
-    
-        // Upload the image to Google Cloud Storage
-        const file = storage.bucket(bucketName).file(filename);
-        await file.save(fileBuffer);
-    
-        // Get the access URL of the uploaded image
-        const accessUrl = `https://storage.googleapis.com/${bucketName}/${filename}`;
-    
-        // Process the image or save information to the database, etc.
 
+        // Save the file buffer as a local file
+        const localFilePath = `${uuidv4()}_${req.file.originalname}`;
+        fs.writeFileSync(localFilePath, fileBuffer);
+
+        const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
+        const containerClient = blobServiceClient.getContainerClient(containerName);
+
+        const blobName = uuidv4()+".jpg";
+        const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+
+        // Upload the local file to Azure Blob Storage
+        const uploadBlobResponse = await blockBlobClient.uploadFile(localFilePath);
+        console.log(`File uploaded: ${uploadBlobResponse.requestId}`);
+
+        const blobUrl = blockBlobClient.url;
+        console.log(`Public link for the uploaded file: ${blobUrl}`);
+
+        fs.unlinkSync(localFilePath);
+
+        
         let objtoUpdate = {}
 
-        objtoUpdate.profile_img = accessUrl;
+        objtoUpdate.profile_img = blobUrl;
         
         const update = { $set:objtoUpdate };
 
         const result = await logintab.updateOne(filter, update);
 
         // console.log(accessUrl);
-    
-        // Respond with success and the access URL
-        res.send({ success: true, imageUrl: accessUrl });
-      } catch (error) {
+
+        res.status(200).json({ success: true, imageUrl: blobUrl });
+    } catch (error) {
         console.error('Error uploading image:', error);
         res.status(500).json({ error: 'Internal Server Error' });
-      }
+    }
+});
 
-  });
+
+
+//   app.post('/update_image', upload.single('image'), async (req, res) => {
+
+//     try {
+//         if (!req.file) {
+//           return res.status(400).json({ error: 'No file provided' });
+//         }
+
+//         const filter = {email: req.body.email };
+    
+//         const fileBuffer = req.file.buffer;
+    
+//         // Generate a unique filename for the uploaded image
+//         const filename = `${uuidv4()}-${req.file.originalname}`;
+    
+//         // Upload the image to Google Cloud Storage
+//         const file = storage.bucket(bucketName).file(filename);
+//         await file.save(fileBuffer);
+    
+//         // Get the access URL of the uploaded image
+//         const accessUrl = `https://storage.googleapis.com/${bucketName}/${filename}`;
+    
+//         // Process the image or save information to the database, etc.
+
+//         let objtoUpdate = {}
+
+//         objtoUpdate.profile_img = accessUrl;
+        
+//         const update = { $set:objtoUpdate };
+
+//         const result = await logintab.updateOne(filter, update);
+
+//         // console.log(accessUrl);
+    
+//         // Respond with success and the access URL
+//         res.send({ success: true, imageUrl: accessUrl });
+//       } catch (error) {
+//         console.error('Error uploading image:', error);
+//         res.status(500).json({ error: 'Internal Server Error' });
+//       }
+
+//   });
 
 app.post("/forget_email",async (req, res) => {
     console.log("Got forget_email")
@@ -299,6 +355,8 @@ app.post("/otp_handle",async (req,res) => {
         otp_default = result.otp
 
         const resulter = await logintab.findOne({email: email_id})
+
+        console.log(resulter)
 
         if((req.body.otp+"") == (otp_default+""))
         {
@@ -935,6 +993,6 @@ app.post("/fetch_available",async (req,res) => {
     
 })
 
-app.listen(8080, () => {
+app.listen(5000, () => {
     console.log("Listening on port 5000...")
 })
